@@ -48,7 +48,7 @@ public class FitbitAPIClientService<C extends FitbitApiClientAgent> {
     public C getClient() {
         return client;
     }
-    
+
     public APIResourceCredentials getResourceCredentialsByUser(LocalUserDetail user) {
         if (null == credentialsCache) {
             return null;
@@ -88,7 +88,7 @@ public class FitbitAPIClientService<C extends FitbitApiClientAgent> {
         return tempCredentials.getAuthorizationURL();
     }
 
-    public void getTokenCredentials(LocalUserDetail user) throws FitbitAPIException {
+    public APIResourceCredentials getTokenCredentials(LocalUserDetail user) throws FitbitAPIException {
         // Get cached resource credentials:
         APIResourceCredentials resourceCredentials = getResourceCredentialsByUser(user);
         if (resourceCredentials == null) {
@@ -106,6 +106,8 @@ public class FitbitAPIClientService<C extends FitbitApiClientAgent> {
         resourceCredentials.setAccessToken(accessToken.getToken());
         resourceCredentials.setAccessTokenSecret(accessToken.getTokenSecret());
         resourceCredentials.setResourceId(accessToken.getEncodedUserId());
+        saveResourceCredentials(user, resourceCredentials);
+        return resourceCredentials;
     }
 
     public Activities getActivities(LocalUserDetail user, LocalDate date) throws FitbitAPIException {
